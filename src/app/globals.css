@@ -3,18 +3,39 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* Core colors */
+  --color-primary: #101828;
+  --color-secondary: #344054;
+  --color-tertiary: #475467;
+  --color-placeholder: #667085;
+  --color-border: #d0d5dd;
+  --color-border-secondary: #eaecf0;
+  --color-bg-secondary: #f9fafb;
+  --color-highlight: #7f56d9;
+  --color-accent: #6941c6;
+  --color-neutral: #d6bbfb;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+  /* Text colors */
+  --text-primary: var(--color-primary);
+  --text-secondary: var(--color-secondary);
+  --text-tertiary: var(--color-tertiary);
+  --text-placeholder: var(--color-placeholder);
 
-body {
-  color: var(--foreground);
-  background: var(--background);
+  /* Border colors */
+  --border-primary: var(--color-border);
+  --border-secondary: var(--color-border-secondary);
+
+  /* Background colors */
+  --bg-secondary: var(--color-bg-secondary);
+
+  /* Button colors */
+  --button-primary-bg: var(--color-highlight);
+  --button-secondary-fg: var(--color-accent);
+  --button-secondary-text: var(--color-secondary);
+  --button-tertiary-fg: var(--color-tertiary);
+  --button-secondary-border: var(--color-border);
+  --button-accent-border: var(--color-neutral);
+
+  /* Utility colors */
+  --fg-quaternary: var(--color-placeholder);
 }
