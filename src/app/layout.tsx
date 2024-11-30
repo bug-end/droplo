@@ -16,7 +16,7 @@ export default function RootLayout({
       <head>
         <link rel='stylesheet' href='https://rsms.me/inter/inter.css' />
       </head>
-      <body className='font-sans antialiased'>{children}</body>
+      <body className='font-sans antialiased max-w-[1208px] mx-auto px-6 py-[30px]'>{children}</body>
     </html>
   );
 }
