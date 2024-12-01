@@ -1,10 +1,10 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage, FieldProps } from 'formik';
+import * as Yup from 'yup';
 import { Button, Input } from '@headlessui/react';
+import { NavigationFormData } from '@/types/navigation';
 import TrashIcon from '@/assets/icons/trash.svg';
 import SearchIcon from '@/assets/icons/search.svg';
-import * as Yup from 'yup';
-import { NavigationFormData } from '@/types/navigation';
 
 interface NavigationFormProps {
   onCancel: () => void;

@@ -39,3 +39,7 @@
   /* Utility colors */
   --fg-quaternary: var(--color-placeholder);
 }
+
+body {
+  background-color: ghostwhite;
+}
