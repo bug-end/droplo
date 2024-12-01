@@ -29,7 +29,7 @@ export const NavigationList: React.FC<NavigationListProps> = ({ nodes, onAdd, on
       <div className='border-r border-l border-b border-[var(--border-primary)] rounded-b-lg'>
         {showTopLevelForm && (
           <div className='px-6 py-4 bg-[var(--bg-secondary)] border-b border-[var(--border-secondary)]'>
-            <NavigationForm onCancel={toggleTopLevelForm} onDelete={toggleTopLevelForm} onSubmit={() => {}} />
+            <NavigationForm onCancel={toggleTopLevelForm} onDelete={toggleTopLevelForm} onSubmit={onAdd} />
           </div>
         )}
         <div className='px-6 py-5'>
