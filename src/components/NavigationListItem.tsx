@@ -6,8 +6,8 @@ import { NavigationForm } from '@/components/NavigationForm';
 
 interface NavigationListItemProps {
   node: NavigationItem;
-  onAdd: (values: NavigationFormData) => void;
-  onDelete: () => void;
+  onAdd: (values: NavigationFormData, parentId?: string) => void;
+  onDelete: (id: string) => void;
 }
 
 export const NavigationListItem: React.FC<NavigationListItemProps> = ({ node, onAdd, onDelete }) => {
@@ -30,7 +30,10 @@ export const NavigationListItem: React.FC<NavigationListItemProps> = ({ node, on
         </div>
 
         <div className='flex rounded-lg border border-[var(--button-secondary-border)] shrink-0'>
-          <Button onClick={onDelete} className='text-sm text-[var(--text-secondary)] font-semibold py-[10px] px-4'>
+          <Button
+            onClick={() => onDelete(node.id)}
+            className='text-sm text-[var(--text-secondary)] font-semibold py-[10px] px-4'
+          >
             Usuń
           </Button>
           <Button
@@ -49,9 +52,25 @@ export const NavigationListItem: React.FC<NavigationListItemProps> = ({ node, on
       </div>
       {showNestedForm ? (
         <div className='pl-16 pr-6 py-4 bg-[var(--bg-secondary)] border-t border-[var(--border-secondary)]'>
-          <NavigationForm onCancel={toggleNestedForm} onDelete={onDelete} onSubmit={onAdd} />
+          <NavigationForm
+            nodeId={node.id}
+            onCancel={toggleNestedForm}
+            onDelete={toggleNestedForm}
+            onSubmit={(values) => {
+              onAdd(values, node.id);
+              toggleNestedForm();
+            }}
+          />
         </div>
       ) : null}
+
+      {node.children && node.children.length > 0 && (
+        <ul className='pl-8 bg-[var(--bg-secondary)]'>
+          {node.children.map((childNode) => (
+            <NavigationListItem key={childNode.id} node={childNode} onAdd={onAdd} onDelete={onDelete} />
+          ))}
+        </ul>
+      )}
     </li>
   );
 };

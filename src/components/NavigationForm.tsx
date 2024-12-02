@@ -7,9 +7,10 @@ import TrashIcon from '@/assets/icons/trash.svg';
 import SearchIcon from '@/assets/icons/search.svg';
 
 interface NavigationFormProps {
+  nodeId?: string;
   onCancel: () => void;
   onDelete: () => void;
-  onSubmit: (values: NavigationFormData) => void;
+  onSubmit: (values: NavigationFormData, parentId?: string) => void;
 }
 
 export const NavigationForm: React.FC<NavigationFormProps> = ({ onCancel, onDelete, onSubmit }) => {

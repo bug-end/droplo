@@ -6,8 +6,8 @@ import { NavigationListItem } from '@/components/NavigationListItem';
 
 interface NavigationListProps {
   nodes?: NavigationItem[];
-  onAdd: (values: NavigationFormData) => void;
-  onDelete: () => void;
+  onAdd: (values: NavigationFormData, parentId?: string) => void;
+  onDelete: (id: string) => void;
 }
 
 export const NavigationList: React.FC<NavigationListProps> = ({ nodes, onAdd, onDelete }) => {
@@ -29,7 +29,14 @@ export const NavigationList: React.FC<NavigationListProps> = ({ nodes, onAdd, on
       <div className='border-r border-l border-b border-[var(--border-primary)] rounded-b-lg'>
         {showTopLevelForm && (
           <div className='px-6 py-4 bg-[var(--bg-secondary)] border-b border-[var(--border-secondary)]'>
-            <NavigationForm onCancel={toggleTopLevelForm} onDelete={toggleTopLevelForm} onSubmit={onAdd} />
+            <NavigationForm
+              onCancel={toggleTopLevelForm}
+              onDelete={toggleTopLevelForm}
+              onSubmit={(values) => {
+                onAdd(values);
+                toggleTopLevelForm();
+              }}
+            />
           </div>
         )}
         <div className='px-6 py-5'>
