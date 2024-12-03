@@ -7,6 +7,8 @@ import { NavigationFormData, NavigationItem } from '@/types/navigation';
 import AddIcon from '@/assets/icons/add.svg';
 import { NavigationForm } from '@/components/NavigationForm';
 import { NavigationList } from '@/components/NavigationList';
+import { arrayMove } from '@dnd-kit/sortable';
+import { DragEndEvent } from '@dnd-kit/core';
 
 export default function NavigationPage() {
   const [showForm, setShowForm] = useState(false);
@@ -66,6 +68,19 @@ export default function NavigationPage() {
     setNodes((prevNodes) => deleteNode(prevNodes));
   };
 
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      setNodes((items) => {
+        const oldIndex = items.findIndex((item) => item.id === active.id);
+        const newIndex = items.findIndex((item) => item.id === over.id);
+
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
+  };
+
   return (
     <>
       {nodes.length === 0 ? (
@@ -89,7 +104,7 @@ export default function NavigationPage() {
           </div>
         )
       ) : (
-        <NavigationList nodes={nodes} onAdd={handleAdd} onDelete={handleDelete} />
+        <NavigationList nodes={nodes} onAdd={handleAdd} onDelete={handleDelete} onDragEnd={handleDragEnd} />
       )}
     </>
   );

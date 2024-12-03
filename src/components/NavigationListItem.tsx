@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@headlessui/react';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { NavigationFormData, NavigationItem } from '@/types/navigation';
 import MoveIcon from '@/assets/icons/move.svg';
 import { NavigationForm } from '@/components/NavigationForm';
@@ -13,13 +15,21 @@ interface NavigationListItemProps {
 
 export const NavigationListItem: React.FC<NavigationListItemProps> = ({ node, onAdd, onDelete, variant }) => {
   const [showNestedForm, setShowNestedForm] = useState(false);
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: node.id });
 
   const toggleNestedForm = () => {
     setShowNestedForm(!showNestedForm);
   };
 
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
   return (
     <li
+      ref={setNodeRef}
+      style={style}
       className={`${
         variant === 'nested' ? '' : 'bg-white border-b border-[var(--border-secondary)] first:rounded-t-lg'
       }`}
@@ -33,7 +43,12 @@ export const NavigationListItem: React.FC<NavigationListItemProps> = ({ node, on
             : ''
         }`}
       >
-        <Button aria-label='Zmień pozycję elementu' className='flex items-center justify-center w-10 h-10 shrink-0'>
+        <Button
+          {...attributes}
+          {...listeners}
+          aria-label='Zmień pozycję elementu'
+          className='flex items-center justify-center w-10 h-10 shrink-0 cursor-move'
+        >
           <MoveIcon className='w-5 h-5 text-[var(--button-tertiary-fg)]' />
         </Button>
 

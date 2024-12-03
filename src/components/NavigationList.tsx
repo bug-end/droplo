@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@headlessui/react';
+import { DndContext, DragEndEvent } from '@dnd-kit/core';
+import { SortableContext } from '@dnd-kit/sortable';
 import { NavigationFormData, NavigationItem } from '@/types/navigation';
 import { NavigationForm } from '@/components/NavigationForm';
 import { NavigationListItem } from '@/components/NavigationListItem';
@@ -8,9 +10,10 @@ interface NavigationListProps {
   nodes?: NavigationItem[];
   onAdd: (values: NavigationFormData, parentId?: string) => void;
   onDelete: (id: string) => void;
+  onDragEnd: (event: DragEndEvent) => void;
 }
 
-export const NavigationList: React.FC<NavigationListProps> = ({ nodes, onAdd, onDelete }) => {
+export const NavigationList: React.FC<NavigationListProps> = ({ nodes, onAdd, onDelete, onDragEnd }) => {
   const [showTopLevelForm, setShowTopLevelForm] = useState(false);
 
   const toggleTopLevelForm = () => {
@@ -21,9 +24,13 @@ export const NavigationList: React.FC<NavigationListProps> = ({ nodes, onAdd, on
     <div>
       <div className='border-r border-l border-t border-[var(--border-primary)] rounded-t-lg bg-white'>
         <ul>
-          {nodes?.map((node, index) => (
-            <NavigationListItem key={index} node={node} onAdd={onAdd} onDelete={onDelete} />
-          ))}
+          <DndContext onDragEnd={onDragEnd}>
+            <SortableContext items={nodes || []}>
+              {nodes?.map((node) => (
+                <NavigationListItem key={node.id} node={node} onAdd={onAdd} onDelete={onDelete} />
+              ))}
+            </SortableContext>
+          </DndContext>
         </ul>
       </div>
       <div className='border-r border-l border-b border-[var(--border-primary)] rounded-b-lg'>
