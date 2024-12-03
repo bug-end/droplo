@@ -55,6 +55,29 @@ export default function NavigationPage() {
     });
   };
 
+  const handleEdit = (values: NavigationFormData, id: string) => {
+    const editNode = (nodes: NavigationItem[]): NavigationItem[] => {
+      return nodes.map((node) => {
+        if (node.id === id) {
+          // Update the node's label and url if the id matches
+          return {
+            ...node,
+            label: values.name,
+            url: values.link,
+          };
+        }
+
+        // Recursively traverse children to find the node to update
+        return {
+          ...node,
+          children: editNode(node.children || []),
+        };
+      });
+    };
+
+    setNodes((prevNodes) => editNode(prevNodes));
+  };
+
   const handleDelete = (id: string) => {
     const deleteNode = (nodes: NavigationItem[]): NavigationItem[] => {
       return nodes
@@ -104,7 +127,13 @@ export default function NavigationPage() {
           </div>
         )
       ) : (
-        <NavigationList nodes={nodes} onAdd={handleAdd} onDelete={handleDelete} onDragEnd={handleDragEnd} />
+        <NavigationList
+          nodes={nodes}
+          onAdd={handleAdd}
+          onDelete={handleDelete}
+          onDragEnd={handleDragEnd}
+          onEdit={handleEdit}
+        />
       )}
     </>
   );

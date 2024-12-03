@@ -47,6 +47,7 @@ export const NavigationForm: React.FC<NavigationFormProps> = ({ onCancel, onDele
               <Field id='name' name='name'>
                 {({ field, form }: FieldProps<string, NavigationFormData>) => (
                   <Input
+                    autoFocus
                     id='name'
                     name={field.name}
                     value={field.value}

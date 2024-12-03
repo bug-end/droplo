@@ -11,9 +11,10 @@ interface NavigationListProps {
   onAdd: (values: NavigationFormData, parentId?: string) => void;
   onDelete: (id: string) => void;
   onDragEnd: (event: DragEndEvent) => void;
+  onEdit: (values: NavigationFormData, id: string) => void;
 }
 
-export const NavigationList: React.FC<NavigationListProps> = ({ nodes, onAdd, onDelete, onDragEnd }) => {
+export const NavigationList: React.FC<NavigationListProps> = ({ nodes, onAdd, onDelete, onDragEnd, onEdit }) => {
   const [showTopLevelForm, setShowTopLevelForm] = useState(false);
 
   const toggleTopLevelForm = () => {
@@ -27,7 +28,7 @@ export const NavigationList: React.FC<NavigationListProps> = ({ nodes, onAdd, on
           <DndContext onDragEnd={onDragEnd}>
             <SortableContext items={nodes || []}>
               {nodes?.map((node) => (
-                <NavigationListItem key={node.id} node={node} onAdd={onAdd} onDelete={onDelete} />
+                <NavigationListItem key={node.id} node={node} onAdd={onAdd} onDelete={onDelete} onEdit={onEdit} />
               ))}
             </SortableContext>
           </DndContext>

@@ -10,14 +10,17 @@ interface NavigationListItemProps {
   variant?: 'nested';
   node: NavigationItem;
   onAdd: (values: NavigationFormData, parentId?: string) => void;
+  onEdit: (values: NavigationFormData, id: string) => void;
   onDelete: (id: string) => void;
 }
 
-export const NavigationListItem: React.FC<NavigationListItemProps> = ({ node, onAdd, onDelete, variant }) => {
+export const NavigationListItem: React.FC<NavigationListItemProps> = ({ node, onAdd, onDelete, onEdit, variant }) => {
   const [showNestedForm, setShowNestedForm] = useState(false);
+  const [formMode, setFormMode] = useState<'edit' | 'add'>('add');
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: node.id });
 
-  const toggleNestedForm = () => {
+  const toggleNestedForm = (mode: 'edit' | 'add' = 'add') => {
+    setFormMode(mode);
     setShowNestedForm(!showNestedForm);
   };
 
@@ -65,13 +68,13 @@ export const NavigationListItem: React.FC<NavigationListItemProps> = ({ node, on
             Usuń
           </Button>
           <Button
-            onClick={toggleNestedForm}
+            onClick={() => toggleNestedForm('edit')}
             className='text-sm text-[var(--text-secondary)] font-semibold py-[10px] px-4 border-x border-[var(--button-secondary-border)]'
           >
             Edytuj
           </Button>
           <Button
-            onClick={toggleNestedForm}
+            onClick={() => toggleNestedForm('add')}
             className='text-sm text-[var(--text-secondary)] font-semibold py-[10px] px-4'
           >
             Dodaj pozycję menu
@@ -89,7 +92,11 @@ export const NavigationListItem: React.FC<NavigationListItemProps> = ({ node, on
             onCancel={toggleNestedForm}
             onDelete={toggleNestedForm}
             onSubmit={(values) => {
-              onAdd(values, node.id);
+              if (formMode === 'edit') {
+                onEdit(values, node.id);
+              } else {
+                onAdd(values, node.id);
+              }
               toggleNestedForm();
             }}
           />
@@ -104,6 +111,7 @@ export const NavigationListItem: React.FC<NavigationListItemProps> = ({ node, on
               node={childNode}
               onAdd={onAdd}
               onDelete={onDelete}
+              onEdit={onEdit}
               variant='nested'
             />
           ))}
