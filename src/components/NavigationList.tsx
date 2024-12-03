@@ -5,6 +5,7 @@ import { SortableContext } from '@dnd-kit/sortable';
 import { NavigationFormData, NavigationItem } from '@/types/navigation';
 import { NavigationForm } from '@/components/NavigationForm';
 import { NavigationListItem } from '@/components/NavigationListItem';
+import { flattenTree } from '@/utils/dragndrop';
 
 interface NavigationListProps {
   nodes?: NavigationItem[];
@@ -26,7 +27,7 @@ export const NavigationList: React.FC<NavigationListProps> = ({ nodes, onAdd, on
       <div className='border-r border-l border-t border-[var(--border-primary)] rounded-t-lg bg-white'>
         <ul>
           <DndContext onDragEnd={onDragEnd}>
-            <SortableContext items={nodes || []}>
+            <SortableContext items={flattenTree(nodes || [])}>
               {nodes?.map((node) => (
                 <NavigationListItem key={node.id} node={node} onAdd={onAdd} onDelete={onDelete} onEdit={onEdit} />
               ))}

@@ -9,12 +9,11 @@ import { NavigationForm } from '@/components/NavigationForm';
 import { NavigationList } from '@/components/NavigationList';
 import { arrayMove } from '@dnd-kit/sortable';
 import { DragEndEvent } from '@dnd-kit/core';
+import { flattenTree, reconstructTree } from '@/utils/dragndrop';
 
 export default function NavigationPage() {
   const [showForm, setShowForm] = useState(false);
   const [nodes, setNodes] = useState<NavigationItem[]>([]);
-
-  console.log('nodes', nodes);
 
   const toggleForm = () => {
     setShowForm(!showForm);
@@ -91,17 +90,20 @@ export default function NavigationPage() {
     setNodes((prevNodes) => deleteNode(prevNodes));
   };
 
+  // TODO: update this function to handle moving nested nodes between parent nodes
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
-    if (over && active.id !== over.id) {
-      setNodes((items) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id);
-        const newIndex = items.findIndex((item) => item.id === over.id);
+    if (!over || active.id === over.id) return;
 
-        return arrayMove(items, oldIndex, newIndex);
-      });
-    }
+    setNodes((currentNodes) => {
+      const flatNodes = flattenTree(currentNodes);
+      const oldIndex = flatNodes.findIndex((node) => node.id === active.id);
+      const newIndex = flatNodes.findIndex((node) => node.id === over.id);
+
+      const updatedFlatNodes = arrayMove(flatNodes, oldIndex, newIndex);
+      return reconstructTree(updatedFlatNodes);
+    });
   };
 
   return (
